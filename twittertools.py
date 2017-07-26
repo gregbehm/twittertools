@@ -37,9 +37,9 @@ def get_api(credentials_file):
 
     def load_json_credentials(credentials_file):
         """
-        Load the Twitter app credentials_file from the given
-        Twitter API credentials_file JSON file (shown below)
-        and return credentials_file as a namedtuple containing
+        Load the Twitter app credentials file from the given
+        JSON credentials_file (example shown below) and return
+        the authentication credentials as a namedtuple containing
         the four necessary data items:
             {
                 "consumer_key": "I1TA0HMjTozzsT6CC4nPaSsgM",
