@@ -1,4 +1,7 @@
-# twittertools
+# twittertools.py
+
+**Source code for this project is in file ```twittertools.py```** 
+
 Demonstration Twitter REST API tools  
 Author: Greg Behm  
 Copyright 2017  
@@ -12,7 +15,6 @@ Read the Twitter Terms of Service, Twitter Developer Agreement,
 and Twitter Developer Policy before collecting Twitter content  
 with this or any derivative software.
 
-**Source code for this project is in file ```twittertools.py```**
 
 ## Example use
 
@@ -124,5 +126,4 @@ for query in random.sample(trend_queries, 200):
 print(f'Total tweets from trend searches: {len(tweets)}')
 
 save_tweets(tweets, 'tweets.csv')
-
 ```
