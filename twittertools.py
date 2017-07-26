@@ -42,10 +42,10 @@ def get_api(credentials_file):
         and return credentials_file as a namedtuple containing
         the four necessary data items:
             {
-                "consumer_key": "ccc",
-                "consumer_secret": "ddd",
-                "access_token": "aaa",
-                "access_token_secret": "bbb"
+                "consumer_key": "I1TA0HMjTozzsT6CC4nPaSsgM",
+                "consumer_secret": "ai401jmC8fPpxA7DSV29D7TAAHq2z86G0rKb55RCdPiEJMzwXd",
+                "access_token": "33244564-wCsIQ4xlr2Z1AyFU4NEq8GF2wbatiWDa9PmZBuhPY",
+                "access_token_secret": "GF16PXSdHbB1xHzXS13528BmfPLHNGkFCVmbvXP45i3Dq"
             }
 
         :param credentials_file: Twitter application credentials JSON file name.
@@ -695,11 +695,14 @@ def main():
 
     # Get Rate Limits data
     print('All rate limits')
-    pprint.pprint(twt.get_rate_limits())
+    limits = twt.get_rate_limits()
+    pprint.pprint(limits)
     print('"Statuses" rate limits')
-    pprint.pprint(twt.get_rate_limits('statuses'))
+    limits = twt.get_rate_limits('statuses')
+    pprint.pprint(limits)
     print('"Search tweets" rate limit')
-    pprint.pprint(twt.get_rate_limits('search', '/search/tweets'))
+    limits = twt.get_rate_limits('search', '/search/tweets')
+    pprint.pprint(limits)
     print()
 
     # Get and save some user profiles
@@ -745,7 +748,7 @@ def main():
         pprint.pprint(tweet)
     print()
 
-    # Test trend methods
+    # Get trends
     all_trend_places = twt.get_trend_locations()
     print(f'Total places with trends available: {len(all_trend_places)}')
     #
@@ -763,7 +766,7 @@ def main():
     print(f'Total U.S. Trends: {len(trends)}')
     print()
 
-    # Test getting Follower and Following IDs
+    # Get Follower and Following IDs
     screen_name = 'RockyMtnInst'
     connection_ids = twt.get_connection_ids(screen_name=screen_name, which='followers')
     print(f'{screen_name} has {len(connection_ids)} Followers')
@@ -771,7 +774,7 @@ def main():
     print(f'{screen_name} Follows {len(connection_ids)} users')
     print()
 
-    # Test REST API Tweet Search
+    # Use REST API Tweet Search
     print('Test the Twitter REST API Tweet Search, with randomly chosen trending topics')
     trend_queries = set()
     woeids = [place['woeid'] for place in all_trend_places]
