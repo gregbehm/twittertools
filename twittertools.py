@@ -42,10 +42,10 @@ def get_api(credentials_file):
         the authentication credentials as a namedtuple containing
         the four necessary data items:
             {
-                "consumer_key": "I1TA0HMjTozzsT6CC4nPaSsgM",
-                "consumer_secret": "ai401jmC8fPpxA7DSV29D7TAAHq2z86G0rKb55RCdPiEJMzwXd",
-                "access_token": "33244564-wCsIQ4xlr2Z1AyFU4NEq8GF2wbatiWDa9PmZBuhPY",
-                "access_token_secret": "GF16PXSdHbB1xHzXS13528BmfPLHNGkFCVmbvXP45i3Dq"
+                "consumer_key": "<consumer_key>",
+                "consumer_secret": "<consumer_secret>",
+                "access_token": "<access_token>",
+                "access_token_secret": "<access_token_secret>"
             }
 
         :param credentials_file: Twitter application credentials JSON file name.
