@@ -15,6 +15,14 @@ Caution!
    Read the Twitter Terms of Service, Twitter Developer Agreement,
    and Twitter Developer Policy before collecting Twitter content
    with this or any derivative software.
+   
+Some software presented here was derived from or inspired by 
+sample code in the book Mining the Social Web, 2nd Edition,
+copyright 2014 by Matthew A. Russell, O'Reilly, ISBN 978-1449367619.
+The book's author and publisher give permission to reuse sample code
+under the Simplified BSD License. More information is found at:
+https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition
+
 """
 
 import collections
