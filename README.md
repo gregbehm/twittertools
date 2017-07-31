@@ -19,6 +19,7 @@ with this or any derivative software.
 ## Example use
 
 ```python
+import json
 import pathlib
 import pprint
 import random
@@ -46,7 +47,7 @@ screen_names = ['katyperry', 'BarackObama', 'pourmecoffee', 'Fahrenthold']
 profiles = twt.get_user_profiles(screen_names=screen_names)
 for profile in profiles:
     pprint.pprint(profile)
-save_profiles(profiles, 'profiles.csv')
+twittertools.save_profiles(profiles, 'profiles.csv')
 print()
 
 # Post a tweet
@@ -125,5 +126,5 @@ for query in random.sample(trend_queries, 200):
     tweets.extend(result)
 print(f'Total tweets from trend searches: {len(tweets)}')
 
-save_to_csv(tweets, unpack_tweet, 'tweets.csv')
+twittertools.save_tweets(tweets, 'tweets.csv')
 ```
