@@ -80,12 +80,25 @@ def get_api(credentials_file):
     return twitter.Twitter(auth=auth)
 
 
+def save_to_json(items, path_or_buf):
+    """
+    Save an iterable of dict objects to a JSON file.
+    
+    :param items: Iterable of dictionary objects
+    :param path_or_buf: String, file path or file handle
+    :return: None
+    """
+
+    with open(path_or_buf, mode='w', encoding='utf-8-sig') as fp:
+        json.dump(items, fp)
+
+
 def save_to_csv(items, unpack_func, path_or_buf):
     """
-    Save a list of tweets to a CSV file, saving select
+    Save an iterable of tweets to a CSV file, saving select
     fields as defined in function unpack_tweet().
     
-    :param tweets: List of tweet objects
+    :param items: Iterable of Twitter objects
     :param unpack_func: function to extract select fields
                         from individual Twitter objects,
                         such as tweets and user profiles
@@ -101,32 +114,28 @@ def save_to_csv(items, unpack_func, path_or_buf):
 
 def save_tweets(tweets, path_or_buf):
     """
-    Save a list of tweets to a CSV file, saving select
+    Save an iterable of tweets to a CSV file, saving select
     fields as defined in function unpack_tweet().
     
-    :param tweets: List of tweet objects
+    :param tweets: Iterable of tweet objects
     :param path_or_buf: String, file path or file handle
     :return: None
     """
 
     save_to_csv(tweets, unpack_tweet, path_or_buf)
-    # df = pandas.DataFrame(unpack_tweet(tweet) for tweet in tweets)
-    # df.to_csv(path_or_buf, index=False, encoding='utf-8-sig')
 
 
 def save_profiles(profiles, path_or_buf):
     """
-    Save a list of user objects to a CSV file, saving select
+    Save an iterable of user objects to a CSV file, saving select
     fields as defined in function unpack_profile().
     
-    :param profiles: List of user objects
+    :param profiles: Iterable of user objects
     :param path_or_buf: String, file path or file handle
     :return: None
     """
 
     save_to_csv(profiles, unpack_profile, path_or_buf)
-    # df = pandas.DataFrame(unpack_profile(profile) for profile in profiles)
-    # df.to_csv(path_or_buf, index=False)
 
 
 def get_data(item, *args):
@@ -762,9 +771,8 @@ def main():
     print(f"Got {len(tweets)} tweets from authenticated user's home timeline")
     tweets = twt.get_user_timeline()
     print(f"Got {len(tweets)} tweets from authenticated user's status timeline")
-    with open('timeline.json', 'w') as fp:
-        json.dump(tweets, fp)
-        print(f'Dumped {len(tweets)} tweets to JSON file')
+    save_to_json(tweets, 'timeline.json')
+    print(f'Dumped {len(tweets)} tweets to JSON file')
     tweets = twt.get_user_favorites()
     print(f"Got {len(tweets)} tweets from authenticated user's favorites")
 

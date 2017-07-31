@@ -63,9 +63,8 @@ tweets = twt.get_home_timeline()
 print(f"Got {len(tweets)} tweets from authenticated user's home timeline")
 tweets = twt.get_user_timeline()
 print(f"Got {len(tweets)} tweets from authenticated user's status timeline")
-with open('timeline.json', 'w') as fp:
-    json.dump(tweets, fp)
-    print(f'Dumped {len(tweets)} tweets to JSON file')
+twittertools.save_to_json(tweets, 'timeline.json')
+print(f'Dumped {len(tweets)} tweets to JSON file')
 tweets = twt.get_user_favorites()
 print(f"Got {len(tweets)} tweets from authenticated user's favorites")
 
