@@ -27,6 +27,7 @@ https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition
 
 import collections
 import datetime
+import itertools
 import json
 import pandas
 import re
@@ -179,6 +180,81 @@ def get_list_dict_data(item, *args):
     key = args[-1]
     return ' '.join(elem[key] for elem in item)
 
+def get_data(item, *args):
+    """
+    Search input item object dictionary by dictionary key words
+    for single-value or list-of-value items. The caller must
+    specify the necessary key words in correct hierarchical
+    order to retrieve the requested item.
+    Examples:
+    
+    To get a tweet's user screen_name, e.g.
+    {"user": {..., "screen_name": "katyperry", ...}},
+    call get_data(tweet, 'user', 'screen_name'). 
+    
+    To get a tweet's hashtags, e.g.
+    {"entities": {"hashtags": [{"text": "blockchain",...}},
+    call get_list_dict_data(tweet, 'entities', 'hashtags', 'text')
+    
+    :param item: Twitter dictionary object, e.g. Tweet or User
+    :param args: Item-search dictionary keys
+    :return: Requested item or object. If the last args key word
+             retrieves a list of objects, get_data() returns a
+             concatenated string of list items.
+    """
+
+    def next_item(item, key):
+        """
+        Get a dictionary or list object, depending on whether
+        the input item is a dictionary or list.
+        
+        :param item: Twitter object dictionary or list
+        :param key: Target element key word
+        :return: If item is a dictionary, return the value for input key.
+                 If item is a list with dictionary elements containing
+                 the input key, return the list.
+        """
+
+        # Try item as a dictionary
+        try:
+            # return the dictionary item's value
+            return item[key]
+        except:
+            # Try item as a list of dictionaries
+            try:
+                if item[0].get(key):
+                    # return the dictionary
+                    return item
+            except:
+                # Nothing relevant found
+                return None
+
+    # def next_item
+
+    for arg in args:
+        item = next_item(item, arg)
+        if not item:
+            return None
+
+    # Handle list items
+    if isinstance(item, list):
+        try:
+            # Try as list of dictionaries
+            key = args[-1]
+            return ' '.join(elem[key] for elem in item)
+        except:
+            pass
+
+        try:
+            # Flatten list of lists
+            flat = itertools.chain.from_iterable(item)
+            return ' '.join(str(elem) for elem in flat)
+        except:
+            pass
+
+    # Return any other item as-is
+    return item
+
 
 def unpack_tweet(tweet):
     """
@@ -188,18 +264,18 @@ def unpack_tweet(tweet):
     :return: Ordered dictionary of select tweet field values
     """
 
-    fields = [('Screen name', get_datum(tweet, 'user', 'screen_name')),
-              ('Created', format_datetime(get_datum(tweet, 'created_at'))),
-              ('Text', clean_whitespace(get_datum(tweet, 'text'))),
-              ('Retweet count', get_datum(tweet, 'retweet_count')),
-              ('Hashtags', get_list_dict_data(tweet, 'entities', 'hashtags', 'text')),
-              ('Mentions', get_list_dict_data(tweet, 'entities', 'user_mentions', 'screen_name')),
-              ('URLs', get_list_dict_data(tweet, 'entities', 'urls', 'url')),
-              ('Expanded URLs', get_list_dict_data(tweet, 'entities', 'urls', 'expanded_url')),
-              ('Media URLs', get_list_dict_data(tweet, 'entities', 'media', 'url')),
-              ('Media types', get_list_dict_data(tweet, 'entities', 'media', 'type')),
-              ('Tweet ID', get_datum(tweet, 'id_str')),
-              ('Symbols', get_list_dict_data(tweet, 'entities', 'symbols', 'text'))
+    fields = [('Screen name', get_data(tweet, 'user', 'screen_name')),
+              ('Created', format_datetime(get_data(tweet, 'created_at'))),
+              ('Text', clean_whitespace(get_data(tweet, 'text'))),
+              ('Retweet count', get_data(tweet, 'retweet_count')),
+              ('Hashtags', get_data(tweet, 'entities', 'hashtags', 'text')),
+              ('Mentions', get_data(tweet, 'entities', 'user_mentions', 'screen_name')),
+              ('URLs', get_data(tweet, 'entities', 'urls', 'url')),
+              ('Expanded URLs', get_data(tweet, 'entities', 'urls', 'expanded_url')),
+              ('Media URLs', get_data(tweet, 'entities', 'media', 'url')),
+              ('Media types', get_data(tweet, 'entities', 'media', 'type')),
+              ('Tweet ID', get_data(tweet, 'id_str')),
+              ('Symbols', get_data(tweet, 'entities', 'symbols', 'text'))
               ]
     return collections.OrderedDict(fields)
 
@@ -212,22 +288,22 @@ def unpack_profile(profile):
     :return: Ordered dictionary of select user field values
     """
 
-    fields = [('Name', get_datum(profile, 'name')),
-              ('Screen name', get_datum(profile, 'screen_name')),
-              ('ID', get_datum(profile, 'id_str')),
-              ('Description', clean_whitespace(get_datum(profile, 'description'))),
-              ('Location', get_datum(profile, 'location')),
-              ('Tweets', get_datum(profile, 'statuses_count')),
-              ('Following', get_datum(profile, 'friends_count')),
-              ('Followers', get_datum(profile, 'followers_count')),
-              ('Favorites', get_datum(profile, 'favourites_count')),
-              ('Language', get_datum(profile, 'lang')),
-              ('Listed', get_datum(profile, 'listed_count')),
-              ('Created', format_datetime(get_datum(profile, 'created_at'))),
-              ('Time zone', get_datum(profile, 'time_zone')),
-              ('Protected', get_datum(profile, 'protected')),
-              ('Verified', get_datum(profile, 'verified')),
-              ('Geo enabled', get_datum(profile, 'geo_enabled'))
+    fields = [('Name', get_data(profile, 'name')),
+              ('Screen name', get_data(profile, 'screen_name')),
+              ('ID', get_data(profile, 'id_str')),
+              ('Description', clean_whitespace(get_data(profile, 'description'))),
+              ('Location', get_data(profile, 'location')),
+              ('Tweets', get_data(profile, 'statuses_count')),
+              ('Following', get_data(profile, 'friends_count')),
+              ('Followers', get_data(profile, 'followers_count')),
+              ('Favorites', get_data(profile, 'favourites_count')),
+              ('Language', get_data(profile, 'lang')),
+              ('Listed', get_data(profile, 'listed_count')),
+              ('Created', format_datetime(get_data(profile, 'created_at'))),
+              ('Time zone', get_data(profile, 'time_zone')),
+              ('Protected', get_data(profile, 'protected')),
+              ('Verified', get_data(profile, 'verified')),
+              ('Geo enabled', get_data(profile, 'geo_enabled'))
               ]
     return collections.OrderedDict(fields)
 
