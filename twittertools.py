@@ -109,8 +109,9 @@ def save_tweets(tweets, path_or_buf):
     :return: None
     """
 
-    df = pandas.DataFrame(unpack_tweet(tweet) for tweet in tweets)
-    df.to_csv(path_or_buf, index=False, encoding='utf-8-sig')
+    save_to_csv(tweets, unpack_tweet, path_or_buf)
+    # df = pandas.DataFrame(unpack_tweet(tweet) for tweet in tweets)
+    # df.to_csv(path_or_buf, index=False, encoding='utf-8-sig')
 
 
 def save_profiles(profiles, path_or_buf):
@@ -123,8 +124,9 @@ def save_profiles(profiles, path_or_buf):
     :return: None
     """
 
-    df = pandas.DataFrame(unpack_profile(profile) for profile in profiles)
-    df.to_csv(path_or_buf, index=False)
+    save_to_csv(profiles, unpack_profile, path_or_buf)
+    # df = pandas.DataFrame(unpack_profile(profile) for profile in profiles)
+    # df.to_csv(path_or_buf, index=False)
 
 
 def get_data(item, *args):
@@ -181,7 +183,7 @@ def get_data(item, *args):
 
     for arg in args:
         item = next_item(item, arg)
-        if not item:
+        if item is None:
             return None
 
     # Handle list items
@@ -747,12 +749,13 @@ def main():
     print()
 
     # Post a tweet
-    # tweet = 'Twitter API Post Status test'
-    # print(f'Post this tweet: {tweet}')
-    # response = twt.post_status_update('Twitter API Post Status test')
-    # tweet = dict(response.items())
-    # pprint.pprint(tweet)
-    # print()
+    tweet = 'Twitter API Post Status test'
+    print(f'Post this tweet: {tweet}')
+    response = twt.post_status_update('Twitter API Post Status test')
+    if response:
+        tweet = dict(response.items())
+        pprint.pprint(tweet)
+    print()
 
     # Get timeline requests
     tweets = twt.get_home_timeline()
@@ -822,7 +825,7 @@ def main():
         tweets.extend(result)
     print(f'Total tweets from trend searches: {len(tweets)}')
 
-    save_to_csv(tweets, unpack_tweet, 'tweets.csv')
+    save_tweets(tweets, 'tweets.csv')
 
 
 if __name__ == '__main__':
