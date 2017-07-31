@@ -80,6 +80,25 @@ def get_api(credentials_file):
     return twitter.Twitter(auth=auth)
 
 
+def save_to_csv(items, unpack_func, path_or_buf):
+    """
+    Save a list of tweets to a CSV file, saving select
+    fields as defined in function unpack_tweet().
+    
+    :param tweets: List of tweet objects
+    :param unpack_func: function to extract select fields
+                        from individual Twitter objects,
+                        such as tweets and user profiles
+                        Example:
+                        save_to_csv(tweets, unpack_tweets, 'tweets.csv')
+    :param path_or_buf: String, file path or file handle
+    :return: None
+    """
+
+    df = pandas.DataFrame(unpack_func(item) for item in items)
+    df.to_csv(path_or_buf, index=False, encoding='utf-8-sig')
+
+
 def save_tweets(tweets, path_or_buf):
     """
     Save a list of tweets to a CSV file, saving select
@@ -108,84 +127,13 @@ def save_profiles(profiles, path_or_buf):
     df.to_csv(path_or_buf, index=False)
 
 
-def get_datum(item, *args):
-    """
-    Search for single-value object element by dictionary key words.
-    The caller must specify the necessary key words in correct hierarchical
-    order. For example, to get a tweet's user screen_name, e.g.
-    {"user": {..., "screen_name": "katyperry", ...}},
-    call get_datum(tweet, 'user', 'screen_name')
-    
-    :param item: Twitter dictionary object, e.g. Tweet or User
-    :param args: Item-search dictionary keys
-    :return: Requested datum, or None if not found.
-    """
-
-    for arg in args:
-        item = item[arg]
-        if not item:
-            return None
-
-    return item
-
-
-def get_list_dict_data(item, *args):
-    """
-    Search for a list of dictionary objects by dictionary key words.
-    The caller must specify the necessary key words in correct hierarchical
-    order. The last key word specifies the dictionary element within each
-    list item. For example, to get a tweet's hashtags, e.g.
-    {"entities": {"hashtags": [{"text": "blockchain",...}},
-    call get_list_dict_data(tweet, 'entities', 'hashtags', 'text')
-    
-    :param item: Twitter dictionary object, e.g. Tweet or User
-    :param args: Item-search dictionary keys
-    :return: Concatenated string of each list element for requested type.
-    """
-
-    def next_item(item, key):
-        """
-        Get a dictionary or list object, depending on whether
-        the input item is a dictionary or list.
-        
-        :param item: Twitter object dictionary or list
-        :param key: Target element key word
-        :return: If item is a dictionary, return the value for input key.
-                 If item is a list with dictionary elements containing
-                 the input key, return the list.
-        """
-
-        # Try item as a dictionary
-        try:
-            # return the dictionary item's value
-            return item[key]
-        except:
-            # Try item as a list of dictionaries
-            try:
-                if item[0].get(key):
-                    # return the dictionary
-                    return item
-            except:
-                # Nothing relevant found
-                return None
-
-    # def next_item
-
-    for arg in args:
-        item = next_item(item, arg)
-        if not item:
-            return None
-
-    # Concatenate all list elements in a space-separated string
-    key = args[-1]
-    return ' '.join(elem[key] for elem in item)
-
 def get_data(item, *args):
     """
-    Search input item object dictionary by dictionary key words
-    for single-value or list-of-value items. The caller must
-    specify the necessary key words in correct hierarchical
-    order to retrieve the requested item.
+    Search input item dictionary by key words for single-value
+    or list-of-value items. The caller must specify the necessary
+    key words in correct hierarchical order to retrieve the
+    requested item.
+    
     Examples:
     
     To get a tweet's user screen_name, e.g.
@@ -799,12 +747,12 @@ def main():
     print()
 
     # Post a tweet
-    tweet = 'Twitter API Post Status test'
-    print(f'Post this tweet: {tweet}')
-    response = twt.post_status_update('Twitter API Post Status test')
-    tweet = dict(response.items())
-    pprint.pprint(tweet)
-    print()
+    # tweet = 'Twitter API Post Status test'
+    # print(f'Post this tweet: {tweet}')
+    # response = twt.post_status_update('Twitter API Post Status test')
+    # tweet = dict(response.items())
+    # pprint.pprint(tweet)
+    # print()
 
     # Get timeline requests
     tweets = twt.get_home_timeline()
@@ -869,12 +817,13 @@ def main():
 
     print(f'Trend queries random sample size: {len(trend_queries)}')
     tweets = []
-    for query in random.sample(trend_queries, 200):
+    for query in random.sample(trend_queries, 150):
         result = twt.search_tweets(query, max_requests=1)
         tweets.extend(result)
     print(f'Total tweets from trend searches: {len(tweets)}')
 
-    save_tweets(tweets, 'tweets.csv')
+    # save_tweets(tweets, 'tweets.csv')
+    save_to_csv(tweets, unpack_tweet, 'tweets.csv')
 
 
 if __name__ == '__main__':
