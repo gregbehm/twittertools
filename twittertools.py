@@ -822,7 +822,6 @@ def main():
         tweets.extend(result)
     print(f'Total tweets from trend searches: {len(tweets)}')
 
-    # save_tweets(tweets, 'tweets.csv')
     save_to_csv(tweets, unpack_tweet, 'tweets.csv')
 
 
