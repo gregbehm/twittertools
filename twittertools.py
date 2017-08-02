@@ -720,17 +720,3 @@ class TwitterTools:
 
         return tweets
 
-def main():
-    import pathlib
-    import pprint
-
-    # Get an authenticated TwitterTools object
-    filename = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
-    twt = TwitterTools(filename)
-
-    # Printed most recent tweet from authenticated user's home timeline
-    tweets = twt.get_home_timeline()
-    pprint.pprint(tweets[0])
-
-if __name__ == '__main__':
-    main()
