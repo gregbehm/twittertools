@@ -2,18 +2,23 @@
 
 **Source code for this project is in file ```twittertools.py```** 
 
-Demonstration Twitter REST API tools  
+Twitter REST API tools  
 Author: Greg Behm  
 Copyright 2017  
  
-Caution!
-This software is for personal use and demonstration only.  
-Any Twitter content collected with this software should be used  
-in accordance with Twitter's Terms of Service: https://twitter.com/en/tos
+Simplified interface for invoking commonly-used Twitter REST API
+endpoint requests. Methods are invoked on an authenticated TwitterTools
+instance. A few module function also are available for convenience,
+such as twittertools.save_tweets().  
+
+*Caution!*
+*This software is for personal use and demonstration only.*  
+*Any Twitter content collected with this software should be used*  
+*in accordance with Twitter's Terms of Service: https://twitter.com/en/tos*
  
-Read the Twitter Terms of Service, Twitter Developer Agreement,  
-and Twitter Developer Policy before collecting Twitter content  
-with this or any derivative software.
+*Read the Twitter Terms of Service, Twitter Developer Agreement,*  
+*and Twitter Developer Policy before collecting Twitter content*  
+*with this or any derivative software.*
 
 
 ## Example use
