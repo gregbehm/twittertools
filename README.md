@@ -36,7 +36,7 @@ filename = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
 twt = twittertools.TwitterTools(filename)
 ```
 
-#### Get Rate Limits data
+#### Get Rate Limits
 ```python
 print('All rate limits')
 limits = twt.get_rate_limits()
@@ -49,7 +49,7 @@ limits = twt.get_rate_limits('search', '/search/tweets')
 pprint.pprint(limits)
 ```
 
-#### Get and save some user profiles
+#### Get and save user profiles
 ```python
 print('User profiles:')
 screen_names = ['katyperry', 'BarackObama', 'pourmecoffee', 'Fahrenthold']
@@ -64,8 +64,9 @@ twittertools.save_profiles(profiles, 'profiles.csv')
 tweet = 'Twitter API Post Status test'
 print(f'Post this tweet: {tweet}')
 response = twt.post_status_update('Twitter API Post Status test')
-tweet = dict(response.items())
-pprint.pprint(tweet)
+if response:
+    tweet = dict(response.items())
+    pprint.pprint(tweet)
 ```
 
 #### Get timeline requests
@@ -143,7 +144,7 @@ for query in random.sample(trend_queries, 200):
 print(f'Total tweets from trend searches: {len(tweets)}')
 ```
 
-#### Save tweet search results to CSV file
+#### Save search results to CSV file
 ```python
 twittertools.save_tweets(tweets, 'tweets.csv')
 ```
