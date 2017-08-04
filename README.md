@@ -1,4 +1,4 @@
-# twittertools.py
+# TwitterTools
 
 **Source code for this project is in file ```twittertools.py```** 
 
@@ -100,14 +100,15 @@ for tweet in tweets:
 ```python
 all_trend_places = twt.get_trend_locations()
 print(f'Total places with trends available: {len(all_trend_places)}')
-#
+
+# Paris, France
 lat, lon = 48.858093, 2.294694
 print(f'Places closest to ({lat}, {lon}):')
 trend_places = twt.get_trend_locations((lat, lon))
 for place in trend_places:
     print(f"   {place['name']} woeid {place['woeid']}")
-```
 
+# U.S. WOEID
 trends = twt.get_trends(woeid=23424977)
 print(f'U.S. Trends:')
 for trend in trends:
