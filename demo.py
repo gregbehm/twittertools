@@ -10,10 +10,13 @@ import twittertools
 
 def main():
     # Get an authenticated TwitterTools object
-    filename = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
-    twt = twittertools.TwitterTools(filename)
 
-    # Get Rate Limits data
+    filepath = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
+    twt = twittertools.TwitterTools(filepath)
+    print()
+
+    # Get Rate Limits
+
     print('All rate limits')
     limits = twt.get_rate_limits()
     pprint.pprint(limits)
@@ -25,16 +28,18 @@ def main():
     pprint.pprint(limits)
     print()
 
-    # Get and save some user profiles
+    # Get and save user profiles
+
     print('User profiles:')
-    screen_names = ['katyperry', 'BarackObama', 'pourmecoffee', 'realDonaldTrump']
+    screen_names = ['katyperry', 'BarackObama', 'pourmecoffee', 'Fahrenthold']
     profiles = twt.get_user_profiles(screen_names=screen_names)
     for profile in profiles:
-        print(profile)
+        pprint.pprint(profile)
     twittertools.save_profiles(profiles, 'profiles.csv')
     print()
 
     # Post a tweet
+
     tweet = 'Twitter API Post Status test'
     print(f'Post this tweet: {tweet}')
     response = twt.post_status_update('Twitter API Post Status test')
@@ -44,6 +49,7 @@ def main():
     print()
 
     # Get timeline requests
+
     tweets = twt.get_home_timeline()
     print(f"Got {len(tweets)} tweets from authenticated user's home timeline")
     tweets = twt.get_user_timeline()
@@ -61,6 +67,7 @@ def main():
     print()
 
     # Get tweets by id
+
     ids = [889189252264853504, 881880194113556480]
     print(f'Get tweets {ids} by id')
     tweets = twt.get_tweets_by_id(ids)
@@ -69,24 +76,28 @@ def main():
     print()
 
     # Get trends
+
+    # Get all trend locations
     all_trend_places = twt.get_trend_locations()
     print(f'Total places with trends available: {len(all_trend_places)}')
-    #
+
+    # Paris, France by coordinates
     lat, lon = 48.858093, 2.294694
     print(f'Places closest to ({lat}, {lon}):')
     trend_places = twt.get_trend_locations((lat, lon))
     for place in trend_places:
         print(f"   {place['name']} woeid {place['woeid']}")
-    print()
 
+    # U.S. WOEID
     trends = twt.get_trends(woeid=23424977)
     print(f'U.S. Trends:')
     for trend in trends:
-        print(trend)
+        pprint.pprint(trend)
     print(f'Total U.S. Trends: {len(trends)}')
     print()
 
     # Get Follower and Following IDs
+
     screen_name = 'RockyMtnInst'
     connection_ids = twt.get_connection_ids(screen_name=screen_name, which='followers')
     print(f'{screen_name} has {len(connection_ids)} Followers')
@@ -95,6 +106,7 @@ def main():
     print()
 
     # Use REST API Tweet Search
+
     print('Test the Twitter REST API Tweet Search, with randomly chosen trending topics')
     trend_queries = set()
     woeids = [place['woeid'] for place in all_trend_places]
@@ -105,10 +117,13 @@ def main():
 
     print(f'Trend queries random sample size: {len(trend_queries)}')
     tweets = []
-    for query in random.sample(trend_queries, 150):
+    for query in random.sample(trend_queries, 200):
         result = twt.search_tweets(query, max_requests=1)
         tweets.extend(result)
     print(f'Total tweets from trend searches: {len(tweets)}')
+    print()
+
+    # Save search results to CSV file
 
     twittertools.save_tweets(tweets, 'tweets.csv')
 
