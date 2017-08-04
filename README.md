@@ -32,8 +32,8 @@ import twittertools
 
 #### Get an authenticated TwitterTools object
 ```python
-filename = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
-twt = twittertools.TwitterTools(filename)
+filepath = pathlib.Path.home().joinpath('.twitter', 'credentials.json')
+twt = twittertools.TwitterTools(filepath)
 ```
 
 #### Get Rate Limits
