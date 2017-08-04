@@ -24,7 +24,6 @@ twittertools.save_tweets().
 ## Example use
 
 ```python
-import json
 import pathlib
 import pprint
 import random
