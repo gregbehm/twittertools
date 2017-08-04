@@ -98,10 +98,11 @@ for tweet in tweets:
 
 #### Get trends
 ```python
+# Get all trend locations
 all_trend_places = twt.get_trend_locations()
 print(f'Total places with trends available: {len(all_trend_places)}')
 
-# Paris, France
+# Paris, France by coordinates
 lat, lon = 48.858093, 2.294694
 print(f'Places closest to ({lat}, {lon}):')
 trend_places = twt.get_trend_locations((lat, lon))
@@ -141,6 +142,9 @@ for query in random.sample(trend_queries, 200):
     result = twt.search_tweets(query, max_requests=1)
     tweets.extend(result)
 print(f'Total tweets from trend searches: {len(tweets)}')
+```
 
+#### Save tweet search results to CSV file
+```python
 twittertools.save_tweets(tweets, 'tweets.csv')
 ```
