@@ -8,7 +8,7 @@ Copyright 2017
  
 Simplified interface for invoking commonly-used Twitter REST API endpoint  
 requests. Methods are invoked on an authenticated TwitterTools instance.  
-A few module function also are available for convenience, such as  
+A few module functions are available for convenience, such as  
 twittertools.save_tweets().  
 
 *Caution!*
