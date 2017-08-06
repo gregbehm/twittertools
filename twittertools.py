@@ -44,40 +44,13 @@ def get_api(credentials_file):
     :return: twitter.Twitter() API object
     """
 
-    def load_json_credentials(credentials_file):
-        """
-        Load the Twitter app credentials file from the given
-        JSON credentials_file (example shown below) and return
-        the authentication credentials as a namedtuple containing
-        the four necessary data items:
-            {
-                "consumer_key": "<consumer_key>",
-                "consumer_secret": "<consumer_secret>",
-                "access_token": "<access_token>",
-                "access_token_secret": "<access_token_secret>"
-            }
-
-        :param credentials_file: Twitter application credentials JSON file name.
-        :return: A namedtuple containing the necessary authentication data.
-        """
-
-        with open(credentials_file) as fd:
-            data = json.load(fd)
-            codes = ['consumer_key', 'consumer_secret',
-                     'access_token', 'access_token_secret']
-            Credentials = collections.namedtuple('Credentials', codes)
-            return Credentials(data['consumer_key'], data['consumer_secret'],
-                               data['access_token'], data['access_token_secret']
-                               )
-
-    # def load_json_credentials
-
-    cr = load_json_credentials(credentials_file)
-    consumer_key, consumer_secret = cr.consumer_key, cr.consumer_secret
-    access_token, access_token_secret = cr.access_token, cr.access_token_secret
-    auth = twitter.oauth.OAuth(access_token, access_token_secret,
-                               consumer_key, consumer_secret)
-    return twitter.Twitter(auth=auth)
+    with open(credentials_file) as fd:
+        data = json.load(fd)
+        auth = twitter.oauth.OAuth(data['access_token'],
+                                   data['access_token_secret'],
+                                   data['consumer_key'],
+                                   data['consumer_secret'])
+        return twitter.Twitter(auth=auth)
 
 
 def save_to_json(items, path_or_buf):
@@ -719,4 +692,3 @@ class TwitterTools:
             tweets.extend(results['statuses'])
 
         return tweets
-
