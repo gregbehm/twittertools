@@ -16,7 +16,7 @@ Caution!
    and Twitter Developer Policy before collecting Twitter content
    with this or any derivative software.
    
-Some software presented here was derived from or inspired by 
+A few of the methods presented here were derived (and improved) from
 sample code in the book Mining the Social Web, 2nd Edition,
 copyright 2014 by Matthew A. Russell, O'Reilly, ISBN 978-1449367619.
 The book's author and publisher give permission to reuse sample code
