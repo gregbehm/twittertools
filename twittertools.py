@@ -44,8 +44,8 @@ def get_api(credentials_file):
     :return: twitter.Twitter() API object
     """
 
-    with open(credentials_file) as fd:
-        data = json.load(fd)
+    with open(credentials_file) as f:
+        data = json.load(f)
         auth = twitter.oauth.OAuth(data['access_token'],
                                    data['access_token_secret'],
                                    data['consumer_key'],
@@ -62,8 +62,8 @@ def save_to_json(items, path_or_buf):
     :return: None
     """
 
-    with open(path_or_buf, mode='w', encoding='utf-8-sig') as fp:
-        json.dump(items, fp)
+    with open(path_or_buf, mode='w', encoding='utf-8-sig') as f:
+        json.dump(items, f)
 
 
 def save_to_csv(items, unpack_func, path_or_buf):
