@@ -4,7 +4,7 @@
 
 Twitter REST API tools  
 Author: Greg Behm  
-Copyright 2017  
+This project is licensed under the terms of the MIT license.
  
 Simplified interface for invoking commonly-used Twitter REST API endpoint  
 requests. Methods are invoked on an authenticated TwitterTools instance.  
