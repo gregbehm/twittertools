@@ -36,6 +36,9 @@ import time
 import twitter
 
 
+# --- Define functions --- #
+
+
 def get_api(credentials_file):
     """
     Create an authenticated twitter.Twitter() API object.
@@ -266,6 +269,9 @@ def clean_whitespace(text):
     """
 
     return re.sub('\s+', ' ', text)
+
+
+# --- Define classes --- #
 
 
 class TwitterTools:
