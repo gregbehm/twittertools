@@ -199,18 +199,18 @@ def unpack_tweet(tweet):
     :return: Ordered dictionary of select tweet field values
     """
 
-    fields = [('Screen name', get_data(tweet, 'user', 'screen_name')),
-              ('Created', format_datetime(get_data(tweet, 'created_at'))),
-              ('Text', clean_whitespace(get_data(tweet, 'text'))),
-              ('Retweet count', get_data(tweet, 'retweet_count')),
-              ('Hashtags', get_data(tweet, 'entities', 'hashtags', 'text')),
-              ('Mentions', get_data(tweet, 'entities', 'user_mentions', 'screen_name')),
-              ('URLs', get_data(tweet, 'entities', 'urls', 'url')),
-              ('Expanded URLs', get_data(tweet, 'entities', 'urls', 'expanded_url')),
-              ('Media URLs', get_data(tweet, 'entities', 'media', 'url')),
-              ('Media types', get_data(tweet, 'entities', 'media', 'type')),
-              ('Tweet ID', get_data(tweet, 'id_str')),
-              ('Symbols', get_data(tweet, 'entities', 'symbols', 'text'))
+    fields = [('screen_name', get_data(tweet, 'user', 'screen_name')),
+              ('created', format_datetime(get_data(tweet, 'created_at'))),
+              ('text', clean_whitespace(get_data(tweet, 'text'))),
+              ('retweet_count', get_data(tweet, 'retweet_count')),
+              ('hashtags', get_data(tweet, 'entities', 'hashtags', 'text')),
+              ('mentions', get_data(tweet, 'entities', 'user_mentions', 'screen_name')),
+              ('urls', get_data(tweet, 'entities', 'urls', 'url')),
+              ('expanded_urls', get_data(tweet, 'entities', 'urls', 'expanded_url')),
+              ('media_urls', get_data(tweet, 'entities', 'media', 'url')),
+              ('media_types', get_data(tweet, 'entities', 'media', 'type')),
+              ('tweet_id', get_data(tweet, 'id_str')),
+              ('symbols', get_data(tweet, 'entities', 'symbols', 'text'))
               ]
     return collections.OrderedDict(fields)
 
@@ -223,22 +223,22 @@ def unpack_profile(profile):
     :return: Ordered dictionary of select user field values
     """
 
-    fields = [('Name', get_data(profile, 'name')),
-              ('Screen name', get_data(profile, 'screen_name')),
-              ('ID', get_data(profile, 'id_str')),
-              ('Description', clean_whitespace(get_data(profile, 'description'))),
-              ('Location', get_data(profile, 'location')),
-              ('Tweets', get_data(profile, 'statuses_count')),
-              ('Following', get_data(profile, 'friends_count')),
-              ('Followers', get_data(profile, 'followers_count')),
-              ('Favorites', get_data(profile, 'favourites_count')),
-              ('Language', get_data(profile, 'lang')),
-              ('Listed', get_data(profile, 'listed_count')),
-              ('Created', format_datetime(get_data(profile, 'created_at'))),
-              ('Time zone', get_data(profile, 'time_zone')),
-              ('Protected', get_data(profile, 'protected')),
-              ('Verified', get_data(profile, 'verified')),
-              ('Geo enabled', get_data(profile, 'geo_enabled'))
+    fields = [('name', get_data(profile, 'name')),
+              ('screen_name', get_data(profile, 'screen_name')),
+              ('id', get_data(profile, 'id_str')),
+              ('description', clean_whitespace(get_data(profile, 'description'))),
+              ('location', get_data(profile, 'location')),
+              ('tweets', get_data(profile, 'statuses_count')),
+              ('following', get_data(profile, 'friends_count')),
+              ('followers', get_data(profile, 'followers_count')),
+              ('favorites', get_data(profile, 'favourites_count')),
+              ('language', get_data(profile, 'lang')),
+              ('listed', get_data(profile, 'listed_count')),
+              ('created', format_datetime(get_data(profile, 'created_at'))),
+              ('time_zone', get_data(profile, 'time_zone')),
+              ('protected', get_data(profile, 'protected')),
+              ('verified', get_data(profile, 'verified')),
+              ('geo_enabled', get_data(profile, 'geo_enabled'))
               ]
     return collections.OrderedDict(fields)
 
