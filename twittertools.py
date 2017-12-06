@@ -288,6 +288,9 @@ class TwitterTools:
                 '/favorites/list': self.api.favorites.list,
                 '/followers/ids': self.api.followers.ids,
                 '/friends/ids': self.api.friends.ids,
+                '/lists/create': self.api.lists.create,
+                '/lists/members/create': self.api.lists.members.create,
+                '/lists/members/create_all': self.api.lists.members.create_all,
                 '/search/tweets': self.api.search.tweets,
                 '/statuses/home_timeline': self.api.statuses.home_timeline,
                 '/statuses/user_timeline': self.api.statuses.user_timeline,
@@ -646,6 +649,67 @@ class TwitterTools:
         if media_ids:
             kwargs['media_ids'] = media_ids
         return self.endpoint_request('/statuses/update', **kwargs)
+
+    def post_lists_create(self, name, mode='private', description=None, **kwargs):
+        """
+        Create a list
+
+        :param name: The name for the list. A list’s name must start with
+                     a letter and can consist only of 25 or fewer letters,
+                     numbers, “-”, or “_” characters.
+        :param mode: "public" or "private"; default "private"
+        :param description: Optional list description (100 character limit)
+        :param kwargs: Optional, user-supplied keyword arguments
+        :return: Twitter List object
+        """
+
+        kwargs['name'] = name
+        kwargs['mode'] = mode
+        if description:
+            kwargs['description'] = description
+        return self.endpoint_request('/lists/create', **kwargs)
+
+    def post_lists_members_create(self, mode='add',
+                                  list_id=None, slug=None,
+                                  user_ids=None, screen_names=None,
+                                  owner_screen_name=None,
+                                  owner_id=None,
+                                  **kwargs):
+
+        """
+        Add user(s) to a list
+
+        :param mode: 'add' member to list, or create 'all' members
+        :param list_id: Numerical list id
+        :param slug: You can identify a list by its slug instead
+                     of by its numerical id. If using slug, must
+                     also specify list owner using owner_id or
+                     owner_screen_name parameter.
+        :param user_ids: Python list of user IDs; up to 100 per request.
+        :param screen_names: Python list of screen names; up to 100 per request.
+        :param owner_screen_name: User screen name who owns list requested by slug.
+        :param owner_id: User ID who owns list requested by slug.
+        :param kwargs: Optional, user-supplied keyword arguments
+        :return: Twitter List object
+        """
+
+        kwargs['slug'] = slug
+        kwargs['list_id'] = list_id
+        kwargs['owner_screen_name'] = owner_screen_name
+        kwargs['owner_id'] = owner_id
+
+        names = screen_names
+        if names:
+            kwargs['screen_name'] = names[0] if mode == 'add' else ','.join(names)
+        elif user_ids:
+            kwargs['user_id'] = user_ids[0] if mode == 'add' else ','.join(user_ids)
+        else:
+            return None
+
+        if mode == 'add':
+            return self.endpoint_request('/lists/members/create', **kwargs)
+        else:
+            return self.endpoint_request('/lists/members/create_all', **kwargs)
 
     def search_tweets(self, query, max_requests=5):
         """
