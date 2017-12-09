@@ -201,7 +201,7 @@ def unpack_tweet(tweet):
 
     fields = [('screen_name', get_data(tweet, 'user', 'screen_name')),
               ('created', format_datetime(get_data(tweet, 'created_at'))),
-              ('text', clean_whitespace(get_data(tweet, 'text'))),
+              ('full_text', clean_whitespace(get_data(tweet, 'full_text'))),
               ('retweet_count', get_data(tweet, 'retweet_count')),
               ('hashtags', get_data(tweet, 'entities', 'hashtags', 'text')),
               ('mentions', get_data(tweet, 'entities', 'user_mentions', 'screen_name')),
@@ -401,6 +401,7 @@ class TwitterTools:
         elif user_id:
             kwargs['user_id'] = user_id
 
+        kwargs['tweet_mode'] = 'extended'
         count = 200
         tweets = []
         while True:
@@ -557,7 +558,7 @@ class TwitterTools:
         item_keyword = 'screen_name' if screen_names else 'user_id'
         return self.get_items_by_lookup('/users/lookup', item_keyword, items)
 
-    def get_tweets_by_id(self, ids):
+    def get_tweets_by_id(self, ids, **kwargs):
         """
         Get a list of tweets, specified by a given list of
         numeric Tweet IDs in parameter ids.
@@ -566,7 +567,8 @@ class TwitterTools:
         :return: List of requested tweets
         """
 
-        return self.get_items_by_lookup('/statuses/lookup', '_id', ids)
+        kwargs['tweet_mode'] = 'extended'
+        return self.get_items_by_lookup('/statuses/lookup', '_id', ids, **kwargs)
 
     def get_connection_ids(self, which='friends', screen_name=None, user_id=None,
                            max_ids=None, **kwargs):
@@ -743,7 +745,7 @@ class TwitterTools:
         """
 
         # Prepare first request
-        kwargs = {'q': query, 'count': 100}
+        kwargs = {'q': query, 'count': 100, 'tweet_mode': 'extended'}
         tweets = []
         for search in range(max_requests):
             if tweets:
