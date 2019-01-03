@@ -3,7 +3,7 @@ twittertools.py
 
 Twitter API data acquisition tools
 Author: Greg Behm
-Copyright 2017
+Copyright 2017-2019
 
 Caution!
    This software is for personal use and demonstration only.
