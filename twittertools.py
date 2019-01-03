@@ -199,9 +199,17 @@ def unpack_tweet(tweet):
     :return: Ordered dictionary of select tweet field values
     """
 
+    try:
+        if tweet['retweeted_status'] is None:
+            text = tweet['full_text']
+        else:
+            text = tweet['retweeted_status']['full_text']
+    except KeyError:
+        text = tweet['full_text']
+
     fields = [('screen_name', get_data(tweet, 'user', 'screen_name')),
               ('created', format_datetime(get_data(tweet, 'created_at'))),
-              ('full_text', clean_whitespace(get_data(tweet, 'full_text'))),
+              ('full_text', clean_whitespace(text)),
               ('retweet_count', get_data(tweet, 'retweet_count')),
               ('hashtags', get_data(tweet, 'entities', 'hashtags', 'text')),
               ('mentions', get_data(tweet, 'entities', 'user_mentions', 'screen_name')),
