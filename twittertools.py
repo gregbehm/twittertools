@@ -26,12 +26,14 @@ https://github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition
 """
 
 import collections
+from contextlib import suppress
 import datetime
 import itertools
 import json
-import pandas
 import re
 import time
+
+import pandas
 # https://pypi.python.org/pypi/twitter
 import twitter
 
@@ -154,13 +156,13 @@ def get_data(item, *args):
         try:
             # return the dictionary item's value
             return item[key]
-        except:
+        except KeyError:
             # Try item as a list of dictionaries
             try:
-                if item[0].get(key):
+                if item[0].get(key, None):
                     # return the dictionary
                     return item
-            except:
+            except (IndexError, AttributeError):
                 # Nothing relevant found
                 return None
 
@@ -173,19 +175,14 @@ def get_data(item, *args):
 
     # Handle list items
     if isinstance(item, list):
-        try:
-            # Try as list of dictionaries
+        # Try as list of dictionaries
+        with suppress(IndexError, KeyError):
             key = args[-1]
             return ' '.join(elem[key] for elem in item)
-        except:
-            pass
 
-        try:
-            # Flatten list of lists
-            flat = itertools.chain.from_iterable(item)
-            return ' '.join(str(elem) for elem in flat)
-        except:
-            pass
+        # Flatten list of lists
+        flat = itertools.chain.from_iterable(item)
+        return ' '.join(str(elem) for elem in flat)
 
     # Return any other item as-is
     return item
@@ -260,11 +257,11 @@ def format_datetime(date_str):
     :return: 
     """
 
-    try:
+    with suppress(TypeError, ValueError):
         dt = datetime.datetime.strptime(date_str, '%a %b %d %H:%M:%S +0000 %Y')
         return dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-    except:
-        return None
+
+    return None
 
 
 def clean_whitespace(text):
